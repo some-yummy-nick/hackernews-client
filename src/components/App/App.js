@@ -1,18 +1,38 @@
 import React, { PureComponent } from "react";
-import './App.css';
+import "./App.css";
 import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
-import { list } from "../../mocks/list";
+
+const PATH_BASE = "https://hn.algolia.com/api/v1";
+const PATH_SEARCH = "/search";
+const PARAM_SEARCH = "query=";
+const DEFAULT_QUERY = "redux";
 
 class App extends PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			list,
-			searchTerm: ''
+			list: null,
+			searchTerm: DEFAULT_QUERY
 		};
 
+	}
+
+	setSearchTopStories = (list) => {
+		this.setState({ list });
+	};
+
+	fetchSearchTopStories = searchTerm => {
+		fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+			.then(response => response.json())
+			.then(list => this.setSearchTopStories(list.hits))
+			.catch(error => error);
+	};
+
+	componentDidMount() {
+		const { searchTerm } = this.state;
+		this.fetchSearchTopStories(searchTerm);
 	}
 
 	onDismiss = id => {
@@ -24,6 +44,12 @@ class App extends PureComponent {
 		this.setState({ searchTerm: event.target.value });
 	};
 
+	onSearchSubmit = event => {
+		event.preventDefault();
+		const { searchTerm } = this.state;
+		this.fetchSearchTopStories(searchTerm);
+	};
+
 	render() {
 		const { searchTerm, list } = this.state;
 		return (
@@ -31,15 +57,18 @@ class App extends PureComponent {
 				<div className="interactions">
 					<Search
 						value={searchTerm}
-						onChange={this.onSearchChange}>
+						onChange={this.onSearchChange}
+						onSubmit={this.onSearchSubmit}
+					>
 						Поиск
 					</Search>
 				</div>
+				{list &&
 				<Table
 					list={list}
-					pattern={searchTerm}
 					onDismiss={this.onDismiss}
 				/>
+				}
 			</div>
 		);
 	}
