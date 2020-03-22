@@ -12,7 +12,7 @@ describe('Button', () => {
 	});
 	test('есть корректный снимок', () => {
 		const component = renderer.create(
-			<Button>Дай мне больше</Button>
+			<Button>тест</Button>
 		);
 		const tree = component.toJSON();
 		expect(tree).toMatchSnapshot();

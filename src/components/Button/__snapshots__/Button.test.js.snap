@@ -6,6 +6,6 @@ exports[`Button есть корректный снимок 1`] = `
   onClick={[Function]}
   type="button"
 >
-  Дай мне больше
+  тест
 </button>
 `;
