@@ -22,6 +22,8 @@ class App extends PureComponent {
 			searchTerm: DEFAULT_QUERY,
 			error: false,
 			isLoading: false,
+			sortKey: 'NONE',
+			isSortReverse: false,
 		};
 
 	}
@@ -82,6 +84,11 @@ class App extends PureComponent {
 		}
 	};
 
+	onSort = (sortKey) => {
+		const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse;
+		this.setState({ sortKey, isSortReverse });
+	};
+
 	componentDidMount() {
 		this._isMounted = true;
 		const { searchTerm } = this.state;
@@ -95,7 +102,7 @@ class App extends PureComponent {
 
 	render() {
 		const {
-			searchKey, searchTerm, data, error, isLoading
+			searchKey, searchTerm, data, error, isLoading, sortKey,isSortReverse
 		} = this.state;
 		const page = (
 			data &&
@@ -131,6 +138,9 @@ class App extends PureComponent {
 						< Table
 							list={list}
 							onDismiss={this.onDismiss}
+							sortKey={sortKey}
+							onSort={this.onSort}
+							isSortReverse={isSortReverse}
 						/>
 						<ButtonWithLoading isLoading={isLoading}
 										   onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
