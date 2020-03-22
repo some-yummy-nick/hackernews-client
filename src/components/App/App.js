@@ -1,15 +1,11 @@
 import React, { PureComponent, Fragment } from "react";
 import axios from 'axios';
 import "./App.css";
+import { PATH_BASE, PATH_SEARCH, PARAM_PAGE, PARAM_SEARCH, DEFAULT_QUERY } from "../../constants";
 import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
 import { Button } from "../Button/Button";
 
-const PATH_BASE = "https://hn.algolia.com/api/v1";
-const PATH_SEARCH = "/search";
-const PARAM_PAGE = 'page=';
-const PARAM_SEARCH = "query=";
-const DEFAULT_QUERY = "redux";
 
 class App extends PureComponent {
 	_isMounted = false;
