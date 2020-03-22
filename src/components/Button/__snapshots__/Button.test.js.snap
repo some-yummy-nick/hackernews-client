@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button есть корректный снимок 1`] = `
+<button
+  className=""
+  onClick={[Function]}
+  type="button"
+>
+  Дай мне больше
+</button>
+`;

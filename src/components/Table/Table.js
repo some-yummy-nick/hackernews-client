@@ -9,9 +9,9 @@ export const Table = ({ list, onDismiss }) =>
 						<span>
 						<a href={item.url}>{item.title}</a>
 						</span>
-				<span> {item.author}</span>
-				<span> {item.num_comments}</span>
-				<span> {item.points} </span>
+				<span>{" "}{item.author}</span>
+				<span>{" "}{item.num_comments}</span>
+				<span>{" "}{item.points}{" "}</span>
 				<span>
 						<Button onClick={() => onDismiss(item.objectID)} className="button-inline">
 							Отбросить

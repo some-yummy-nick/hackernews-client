@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table есть корректный снимок 1`] = `
+<div
+  className="table"
+>
+  <div
+    className="table-row"
+  >
+    <span>
+      <a>
+        title 1
+      </a>
+    </span>
+    <span>
+       
+      name 1
+    </span>
+    <span>
+       
+      1
+    </span>
+    <span>
+       
+      2
+       
+    </span>
+    <span>
+      <button
+        className="button-inline"
+        onClick={[Function]}
+        type="button"
+      >
+        Отбросить
+      </button>
+    </span>
+  </div>
+  <div
+    className="table-row"
+  >
+    <span>
+      <a>
+        title 2
+      </a>
+    </span>
+    <span>
+       
+      name 2
+    </span>
+    <span>
+       
+      1
+    </span>
+    <span>
+       
+      2
+       
+    </span>
+    <span>
+      <button
+        className="button-inline"
+        onClick={[Function]}
+        type="button"
+      >
+        Отбросить
+      </button>
+    </span>
+  </div>
+</div>
+`;
