@@ -6,6 +6,7 @@ import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
 import { Button } from "../Button/Button";
 
+const Loading = () => <div className="interactions">Загрузка ...</div>;
 
 class App extends PureComponent {
 	_isMounted = false;
@@ -17,7 +18,8 @@ class App extends PureComponent {
 			data: null,
 			searchKey: '',
 			searchTerm: DEFAULT_QUERY,
-			error: false
+			error: false,
+			isLoading: false,
 		};
 
 	}
@@ -37,7 +39,8 @@ class App extends PureComponent {
 			data: {
 				...results,
 				[searchKey]: { hits: updatedHits, page }
-			}
+			},
+			isLoading: false
 		});
 	};
 
@@ -46,6 +49,7 @@ class App extends PureComponent {
 	};
 
 	fetchSearchTopStories = (searchTerm, page = 0) => {
+		this.setState({ isLoading: true });
 		axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
 			.then(response => this._isMounted && this.setSearchTopStories(response.data))
 			.catch(error => this._isMounted && this.setState({ error }));
@@ -88,7 +92,9 @@ class App extends PureComponent {
 	}
 
 	render() {
-		const { searchKey, searchTerm, data, error } = this.state;
+		const {
+			searchKey, searchTerm, data, error, isLoading
+		} = this.state;
 		const page = (
 			data &&
 			data[searchKey] &&
@@ -103,6 +109,10 @@ class App extends PureComponent {
 
 		return (
 			<div className="page">
+				{isLoading ?
+					<Loading/>
+					: ""
+				}
 
 				{list.length ?
 					<Fragment>
@@ -120,11 +130,16 @@ class App extends PureComponent {
 							list={list}
 							onDismiss={this.onDismiss}
 						/>
-						<div className="interactions">
-							<Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-								Больше историй
-							</Button>
-						</div>
+						{isLoading ?
+							<Loading/>
+							:
+							<div className="interactions">
+								<Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+									Больше историй
+								</Button>
+							</div>
+						}
+
 					</Fragment>
 					: ""
 
