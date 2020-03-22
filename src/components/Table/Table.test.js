@@ -10,6 +10,8 @@ describe('Table', () => {
 			{ title: 'title 1', author: 'name 1', num_comments: 1, points: 2, objectID: 'y' },
 			{ title: 'title 2', author: 'name 2', num_comments: 1, points: 2, objectID: 'z' },
 		],
+		sortKey: 'TITLE',
+		isSortReverse: false,
 	};
 	test('отрисовывает без ошибки', () => {
 		const div = document.createElement('div');

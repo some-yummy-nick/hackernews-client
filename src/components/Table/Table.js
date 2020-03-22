@@ -16,6 +16,7 @@ export const Table = ({ list, onDismiss, sortKey, onSort, isSortReverse }) => {
 				<Sort
 					sortKey={'TITLE'}
 					onSort={onSort}
+					isSortReverse={isSortReverse}
 					activeSortKey={sortKey}
 				>
 					Заголовок
@@ -23,6 +24,7 @@ export const Table = ({ list, onDismiss, sortKey, onSort, isSortReverse }) => {
 				<Sort
 					sortKey={'AUTHOR'}
 					onSort={onSort}
+					isSortReverse={isSortReverse}
 					activeSortKey={sortKey}
 				>
 					Автор
@@ -30,6 +32,7 @@ export const Table = ({ list, onDismiss, sortKey, onSort, isSortReverse }) => {
 				<Sort
 					sortKey={'COMMENTS'}
 					onSort={onSort}
+					isSortReverse={isSortReverse}
 					activeSortKey={sortKey}
 				>
 					Комментарии
@@ -37,6 +40,7 @@ export const Table = ({ list, onDismiss, sortKey, onSort, isSortReverse }) => {
 				<Sort
 					sortKey={'POINTS'}
 					onSort={onSort}
+					isSortReverse={isSortReverse}
 					activeSortKey={sortKey}
 				>
 					Очки
