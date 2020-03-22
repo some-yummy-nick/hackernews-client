@@ -2,9 +2,11 @@ import React, { PureComponent } from "react";
 import "./App.css";
 import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
+import { Button } from "../Button/Button";
 
 const PATH_BASE = "https://hn.algolia.com/api/v1";
 const PATH_SEARCH = "/search";
+const PARAM_PAGE = 'page=';
 const PARAM_SEARCH = "query=";
 const DEFAULT_QUERY = "redux";
 
@@ -13,20 +15,30 @@ class App extends PureComponent {
 		super(props);
 
 		this.state = {
-			list: null,
+			data: null,
 			searchTerm: DEFAULT_QUERY
 		};
 
 	}
 
-	setSearchTopStories = (list) => {
-		this.setState({ list });
+	setSearchTopStories = data => {
+		const { hits, page } = data;
+		const oldHits = page !== 0
+			? this.state.data.hits
+			: [];
+		const updatedHits = [
+			...oldHits,
+			...hits
+		];
+		this.setState({
+			data: { hits: updatedHits, page }
+		});
 	};
 
-	fetchSearchTopStories = searchTerm => {
-		fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+	fetchSearchTopStories = (searchTerm, page = 0) => {
+		fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
 			.then(response => response.json())
-			.then(list => this.setSearchTopStories(list.hits))
+			.then(data => this.setSearchTopStories(data))
 			.catch(error => error);
 	};
 
@@ -36,8 +48,13 @@ class App extends PureComponent {
 	}
 
 	onDismiss = id => {
-		const updatedList = this.state.list.filter(item => item.objectID !== id);
-		this.setState({ list: updatedList });
+		const updatedList = this.state.data.hits.filter(item => item.objectID !== id);
+		this.setState({
+			data: {
+				...this.state.data,
+				hits: updatedList
+			}
+		});
 	};
 
 	onSearchChange = event => {
@@ -51,7 +68,9 @@ class App extends PureComponent {
 	};
 
 	render() {
-		const { searchTerm, list } = this.state;
+		const { searchTerm, data } = this.state;
+		const page = (data && data.page) || 0;
+
 		return (
 			<div className="page">
 				<div className="interactions">
@@ -63,12 +82,17 @@ class App extends PureComponent {
 						Поиск
 					</Search>
 				</div>
-				{list &&
+				{data &&
 				<Table
-					list={list}
+					list={data.hits}
 					onDismiss={this.onDismiss}
 				/>
 				}
+				<div className="interactions">
+					<Button onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}>
+						Больше историй
+					</Button>
+				</div>
 			</div>
 		);
 	}
