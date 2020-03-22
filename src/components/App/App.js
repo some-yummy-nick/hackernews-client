@@ -16,23 +16,33 @@ class App extends PureComponent {
 
 		this.state = {
 			data: null,
+			searchKey: '',
 			searchTerm: DEFAULT_QUERY
 		};
 
 	}
 
-	setSearchTopStories = data => {
-		const { hits, page } = data;
-		const oldHits = page !== 0
-			? this.state.data.hits
+	setSearchTopStories = result => {
+		const { hits, page } = result;
+		const { searchKey } = this.state;
+		const results = this.state.data;
+		const oldHits = results && results[searchKey]
+			? results[searchKey].hits
 			: [];
 		const updatedHits = [
 			...oldHits,
 			...hits
 		];
 		this.setState({
-			data: { hits: updatedHits, page }
+			data: {
+				...results,
+				[searchKey]: { hits: updatedHits, page }
+			}
 		});
+	};
+
+	needsToSearchTopStories = (searchTerm) => {
+		return !this.state.data[searchTerm];
 	};
 
 	fetchSearchTopStories = (searchTerm, page = 0) => {
@@ -42,17 +52,14 @@ class App extends PureComponent {
 			.catch(error => error);
 	};
 
-	componentDidMount() {
-		const { searchTerm } = this.state;
-		this.fetchSearchTopStories(searchTerm);
-	}
-
 	onDismiss = id => {
-		const updatedList = this.state.data.hits.filter(item => item.objectID !== id);
+		const { searchKey, data } = this.state;
+		const { hits, page } = data[searchKey];
+		const updatedList = hits.filter(item => item.objectID !== id);
 		this.setState({
 			data: {
-				...this.state.data,
-				hits: updatedList
+				...data,
+				[searchKey]: { hits: updatedList, page }
 			}
 		});
 	};
@@ -64,12 +71,31 @@ class App extends PureComponent {
 	onSearchSubmit = event => {
 		event.preventDefault();
 		const { searchTerm } = this.state;
-		this.fetchSearchTopStories(searchTerm);
+		this.setState({ searchKey: searchTerm });
+		if (this.needsToSearchTopStories(searchTerm)) {
+			this.fetchSearchTopStories(searchTerm);
+		}
 	};
 
+	componentDidMount() {
+		const { searchTerm } = this.state;
+		this.setState({ searchKey: searchTerm });
+		this.fetchSearchTopStories(searchTerm);
+	}
+
 	render() {
-		const { searchTerm, data } = this.state;
-		const page = (data && data.page) || 0;
+		const { searchKey, searchTerm, data } = this.state;
+		console.log(this.state);
+		const page = (
+			data &&
+			data[searchKey] &&
+			data[searchKey].page
+		) || 0;
+
+		const list = (
+			data &&
+			data[searchKey] && data[searchKey].hits
+		) || [];
 
 		return (
 			<div className="page">
@@ -82,14 +108,12 @@ class App extends PureComponent {
 						Поиск
 					</Search>
 				</div>
-				{data &&
 				<Table
-					list={data.hits}
+					list={list}
 					onDismiss={this.onDismiss}
 				/>
-				}
 				<div className="interactions">
-					<Button onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}>
+					<Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
 						Больше историй
 					</Button>
 				</div>
