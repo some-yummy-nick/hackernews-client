@@ -1,4 +1,5 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Fragment } from "react";
+import axios from 'axios';
 import "./App.css";
 import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
@@ -17,7 +18,8 @@ class App extends PureComponent {
 		this.state = {
 			data: null,
 			searchKey: '',
-			searchTerm: DEFAULT_QUERY
+			searchTerm: DEFAULT_QUERY,
+			error: false
 		};
 
 	}
@@ -46,10 +48,9 @@ class App extends PureComponent {
 	};
 
 	fetchSearchTopStories = (searchTerm, page = 0) => {
-		fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
-			.then(response => response.json())
-			.then(data => this.setSearchTopStories(data))
-			.catch(error => error);
+		axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
+			.then(response => this.setSearchTopStories(response.data))
+			.catch(error => this.setState({ error }));
 	};
 
 	onDismiss = id => {
@@ -84,8 +85,7 @@ class App extends PureComponent {
 	}
 
 	render() {
-		const { searchKey, searchTerm, data } = this.state;
-		console.log(this.state);
+		const { searchKey, searchTerm, data, error } = this.state;
 		const page = (
 			data &&
 			data[searchKey] &&
@@ -97,26 +97,42 @@ class App extends PureComponent {
 			data[searchKey] && data[searchKey].hits
 		) || [];
 
+
 		return (
 			<div className="page">
-				<div className="interactions">
-					<Search
-						value={searchTerm}
-						onChange={this.onSearchChange}
-						onSubmit={this.onSearchSubmit}
-					>
-						Поиск
-					</Search>
-				</div>
-				<Table
-					list={list}
-					onDismiss={this.onDismiss}
-				/>
-				<div className="interactions">
-					<Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-						Больше историй
-					</Button>
-				</div>
+
+				{list.length ?
+					<Fragment>
+						<div className="interactions">
+
+							<Search
+								value={searchTerm}
+								onChange={this.onSearchChange}
+								onSubmit={this.onSearchSubmit}
+							>
+								Поиск
+							</Search>
+						</div>
+						< Table
+							list={list}
+							onDismiss={this.onDismiss}
+						/>
+						<div className="interactions">
+							<Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+								Больше историй
+							</Button>
+						</div>
+					</Fragment>
+					: ""
+
+				}
+				{error ?
+					<div className="interactions">
+						<p>Что-то произошло не так.</p>
+					</div>
+					: ""
+				}
+
 			</div>
 		);
 	}
