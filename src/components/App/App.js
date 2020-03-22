@@ -12,6 +12,8 @@ const PARAM_SEARCH = "query=";
 const DEFAULT_QUERY = "redux";
 
 class App extends PureComponent {
+	_isMounted = false;
+
 	constructor(props) {
 		super(props);
 
@@ -49,8 +51,8 @@ class App extends PureComponent {
 
 	fetchSearchTopStories = (searchTerm, page = 0) => {
 		axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
-			.then(response => this.setSearchTopStories(response.data))
-			.catch(error => this.setState({ error }));
+			.then(response => this._isMounted && this.setSearchTopStories(response.data))
+			.catch(error => this._isMounted && this.setState({ error }));
 	};
 
 	onDismiss = id => {
@@ -79,9 +81,14 @@ class App extends PureComponent {
 	};
 
 	componentDidMount() {
+		this._isMounted = true;
 		const { searchTerm } = this.state;
 		this.setState({ searchKey: searchTerm });
 		this.fetchSearchTopStories(searchTerm);
+	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	render() {
