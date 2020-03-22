@@ -5,8 +5,10 @@ import { PATH_BASE, PATH_SEARCH, PARAM_PAGE, PARAM_SEARCH, DEFAULT_QUERY } from 
 import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
 import { Button } from "../Button/Button";
+import { Loading } from "../Loading/Loading";
+import { WithLoading } from "../WithLoading/WithLoading";
 
-const Loading = () => <div className="interactions">Загрузка ...</div>;
+const ButtonWithLoading = WithLoading(Button);
 
 class App extends PureComponent {
 	_isMounted = false;
@@ -130,19 +132,12 @@ class App extends PureComponent {
 							list={list}
 							onDismiss={this.onDismiss}
 						/>
-						{isLoading ?
-							<Loading/>
-							:
-							<div className="interactions">
-								<Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-									Больше историй
-								</Button>
-							</div>
-						}
-
+						<ButtonWithLoading isLoading={isLoading}
+										   onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+							Больше историй
+						</ButtonWithLoading>
 					</Fragment>
 					: ""
-
 				}
 				{error ?
 					<div className="interactions">
