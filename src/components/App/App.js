@@ -10,6 +10,25 @@ import { WithLoading } from "../WithLoading/WithLoading";
 
 const ButtonWithLoading = WithLoading(Button);
 
+const updateSearchTopStoriesState = (hits, page) => (prevState) => {
+	const { searchKey } = prevState;
+	const results = prevState.data;
+	const oldHits = results && results[searchKey]
+		? results[searchKey].hits
+		: [];
+	const updatedHits = [
+		...oldHits,
+		...hits
+	];
+	return {
+		data: {
+			...results,
+			[searchKey]: { hits: updatedHits, page }
+		},
+		isLoading: false
+	};
+};
+
 class App extends PureComponent {
 	_isMounted = false;
 
@@ -28,22 +47,7 @@ class App extends PureComponent {
 
 	setSearchTopStories = result => {
 		const { hits, page } = result;
-		const { searchKey } = this.state;
-		const results = this.state.data;
-		const oldHits = results && results[searchKey]
-			? results[searchKey].hits
-			: [];
-		const updatedHits = [
-			...oldHits,
-			...hits
-		];
-		this.setState({
-			data: {
-				...results,
-				[searchKey]: { hits: updatedHits, page }
-			},
-			isLoading: false
-		});
+		this.setState(updateSearchTopStoriesState(hits, page));
 	};
 
 	needsToSearchTopStories = (searchTerm) => {
@@ -81,7 +85,6 @@ class App extends PureComponent {
 			this.fetchSearchTopStories(searchTerm);
 		}
 	};
-
 
 
 	componentDidMount() {
