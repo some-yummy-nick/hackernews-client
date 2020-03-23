@@ -1,5 +1,5 @@
 import React, { PureComponent, Fragment } from "react";
-import axios from 'axios';
+import axios from "axios";
 import "./App.css";
 import { PATH_BASE, PATH_SEARCH, PARAM_PAGE, PARAM_SEARCH, DEFAULT_QUERY } from "../../constants";
 import { Search } from "../Search/Search";
@@ -18,12 +18,10 @@ class App extends PureComponent {
 
 		this.state = {
 			data: null,
-			searchKey: '',
+			searchKey: "",
 			searchTerm: DEFAULT_QUERY,
 			error: false,
 			isLoading: false,
-			sortKey: 'NONE',
-			isSortReverse: false,
 		};
 
 	}
@@ -84,10 +82,7 @@ class App extends PureComponent {
 		}
 	};
 
-	onSort = (sortKey) => {
-		const isSortReverse = this.state.sortKey === sortKey && !this.state.isSortReverse;
-		this.setState({ sortKey, isSortReverse });
-	};
+
 
 	componentDidMount() {
 		this._isMounted = true;
@@ -102,7 +97,7 @@ class App extends PureComponent {
 
 	render() {
 		const {
-			searchKey, searchTerm, data, error, isLoading, sortKey,isSortReverse
+			searchKey, searchTerm, data, error, isLoading, isSortReverse
 		} = this.state;
 		const page = (
 			data &&
@@ -118,11 +113,12 @@ class App extends PureComponent {
 
 		return (
 			<div className="page">
-				{isLoading ?
-					<Loading/>
-					: ""
-				}
-
+				<div className="interactions">
+					{isLoading ?
+						<Loading/>
+						: ""
+					}
+				</div>
 				{list.length ?
 					<Fragment>
 						<div className="interactions">
@@ -138,8 +134,6 @@ class App extends PureComponent {
 						< Table
 							list={list}
 							onDismiss={this.onDismiss}
-							sortKey={sortKey}
-							onSort={this.onSort}
 							isSortReverse={isSortReverse}
 						/>
 						<ButtonWithLoading isLoading={isLoading}

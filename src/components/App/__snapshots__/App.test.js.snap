@@ -4,6 +4,13 @@ exports[`App есть корректный снимок 1`] = `
 <div
   className="page"
 >
+  <div
+    className="interactions"
+  >
+    <p>
+      Загрузка ...
+    </p>
+  </div>
   
   
 </div>

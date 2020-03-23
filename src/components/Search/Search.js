@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 export class Search extends PureComponent {
 	componentDidMount() {
@@ -17,7 +17,9 @@ export class Search extends PureComponent {
 					type="text"
 					value={value}
 					onChange={onChange}
-					ref={(node) => { this.input = node; }}
+					ref={(node) => {
+						this.input = node;
+					}}
 				/>
 				<button type="submit">
 					{children}

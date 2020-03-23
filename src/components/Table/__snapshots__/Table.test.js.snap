@@ -5,6 +5,38 @@ exports[`Table есть корректный снимок 1`] = `
   className="table"
 >
   <div
+    className="table-header"
+  >
+    <button
+      className="button-inline"
+      onClick={[Function]}
+      type="button"
+    >
+      Заголовок
+    </button>
+    <button
+      className="button-inline"
+      onClick={[Function]}
+      type="button"
+    >
+      Автор
+    </button>
+    <button
+      className="button-inline"
+      onClick={[Function]}
+      type="button"
+    >
+      Комментарии
+    </button>
+    <button
+      className="button-inline"
+      onClick={[Function]}
+      type="button"
+    >
+      Очки
+    </button>
+  </div>
+  <div
     className="table-row"
   >
     <span>
