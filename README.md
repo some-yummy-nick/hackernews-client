@@ -1,3 +1,5 @@
+![screenshot](https://github.com/some-yummy-nick/hackernews-client/blob/master/hackernews.png)
+
 https://some-yummy-hackernews.netlify.com/
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
