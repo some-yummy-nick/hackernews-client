@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from "react";
 import axios from "axios";
 import "./App.css";
-import { PATH_BASE, PATH_SEARCH, PARAM_PAGE, PARAM_SEARCH, DEFAULT_QUERY } from "../../constants";
+import { PATH_BASE, PATH_SEARCH, PARAM_PAGE, PARAM_SEARCH, DEFAULT_QUERY, HITS_PER_PAGE } from "../../constants";
 import { Search } from "../Search/Search";
 import { Table } from "../Table/Table";
 import { Button } from "../Button/Button";
@@ -56,7 +56,7 @@ class App extends PureComponent {
 
 	fetchSearchTopStories = (searchTerm, page = 0) => {
 		this.setState({ isLoading: true });
-		axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}`)
+		axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${HITS_PER_PAGE}100`)
 			.then(response => this._isMounted && this.setSearchTopStories(response.data))
 			.catch(error => this._isMounted && this.setState({ error }));
 	};
